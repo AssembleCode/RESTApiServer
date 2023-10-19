@@ -1,0 +1,10 @@
+{
+    "users": [
+        {
+            "name": "Supper Admin",
+            "email": "admin@gmail.com",
+            "phone": "01729346959",
+            "password": "123456"
+        }
+    ]
+}
