@@ -43,7 +43,7 @@ class AuthController extends Controller
             $userInfo = User::where("$field", $username)->first();
 
             // GENERATE JWT token
-            $tokens = $this->jwtService->generateTokens($userInfo, $userCredentials);
+            $tokens = $this->jwtService->generateTokens($userInfo);
 
             return $tokens;
 
