@@ -2,7 +2,10 @@
 
 namespace App\Services;
 
+use App\Models\OAuthAccessToken;
+use App\Models\OAuthRefreshToken;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Support\Str;
 
 class JwtService
@@ -12,6 +15,7 @@ class JwtService
     public function generateTokens($userInfo)
     {
         try {
+            // DON'T SHARE SENSITIVE INFO (LIKE AS PASSWORD)
             $userData = [
                 'id'                 => $userInfo->id,
                 'uuid'               => $userInfo->uuid,
@@ -22,11 +26,32 @@ class JwtService
                 'status'             => $userInfo->status,
             ];
 
-            $accessToken  = $this->createAccessToken($userData);
-            $refreshToken = $this->createRefreshToken($userData);
-            return $accessToken;
-        } catch (\Throwable $th) {
-            //throw $th;
+            $accessTokenArray  = $this->createAccessToken($userData);
+            $refreshTokenArray = $this->createRefreshToken($userData);
+            //ACCESS_TOKEN INSERT
+            $accessTokenInfo = OAuthAccessToken::create([
+                'user_id'      => $userInfo->id,
+                'name'         => $userInfo->name,
+                'access_token' => $accessTokenArray['token'],
+                'revoked'      => 0,
+                'expires_at'   => $accessTokenArray['expires']
+            ]);
+
+            //REFRESH_TOKEN INSERT
+            OAuthRefreshToken::create([
+                'user_id'         => $userInfo->id,
+                'access_token_id' => $accessTokenInfo->id,
+                'refresh_token'   => $refreshTokenArray['token'],
+                'revoked'         => 0,
+                'expires_at'      => $refreshTokenArray['expires']
+            ]);
+
+            return [
+                'access_token'  => $accessTokenArray['token'],
+                'refresh_token' => $refreshTokenArray['token']
+            ];
+        } catch (Exception $exception) {
+            throw $exception;
         }
     }
 

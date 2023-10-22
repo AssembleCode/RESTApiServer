@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'key' => env('JWT_SECRET_KEY', 'rafikulIslam'),
+    'key' => env('JWT_SECRET_KEY', 'rafikulIslam'), //SECRET_KEY SHOULD BE COMPLEX
     'header' => [
         "alg" => "HS256",
         "typ" => "JWT",
