@@ -12,6 +12,40 @@ class JwtService
 {
     protected $token;
 
+    // GET & SET TOKEN FROM REQUEST
+    public function getTokenFromRequest()
+    {
+        $request = request();
+
+        if ($this->token != null) {
+            return $this->token;
+        }
+
+        $token = null;
+        if (empty($this->token)) {
+            $token = $request->bearerToken();
+        }
+
+        return $this->token = $token;
+    }
+
+    // DECODE TOKEN PAYLOAD PART
+    public function getReadablePayloadFromToken($token)
+    {
+        $tokenParts = explode('.', $token);
+        if (count($tokenParts) != 3) return null;
+
+        return json_decode($this->base64Url_decode($tokenParts[1]));
+    }
+
+    // USER INFO FROM TOKEN PAYLOAD
+    public function getUserInfoFromToken()
+    {
+        $token = $this->getTokenFromRequest();
+        $readablePayload = $this->getReadablePayloadFromToken($token);
+        return !empty($readablePayload) && isset($readablePayload) ? $readablePayload->sub : null;
+    }
+
     public function generateTokens($userInfo)
     {
         try {
@@ -33,7 +67,7 @@ class JwtService
                 'user_id'      => $userInfo->id,
                 'name'         => $userInfo->name,
                 'access_token' => $accessTokenArray['token'],
-                'revoked'      => 0,
+                'revoked'      => false,
                 'expires_at'   => $accessTokenArray['expires']
             ]);
 
@@ -42,7 +76,7 @@ class JwtService
                 'user_id'         => $userInfo->id,
                 'access_token_id' => $accessTokenInfo->id,
                 'refresh_token'   => $refreshTokenArray['token'],
-                'revoked'         => 0,
+                'revoked'         => false,
                 'expires_at'      => $refreshTokenArray['expires']
             ]);
 

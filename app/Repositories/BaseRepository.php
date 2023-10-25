@@ -7,20 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 abstract class BaseRepository implements BaseRepositoryInterface
 {
-    /**
-     *
-     * @var Model
-     */
     protected $model;
-    /**
-     * BaseRepository constructor.
-     *
-     * @param Model $model
-     */
-    public function __construct(Model $model)
-    {
-        $this->model = $model;
-    }
 
     public function init()
     {
@@ -41,9 +28,14 @@ abstract class BaseRepository implements BaseRepositoryInterface
         return $this->model->all();
     }
 
-    public function findwhere($column, $value)
+    public function find($id)
     {
-        return $this->model->where("{$column}", $value)->first();
+        return $this->model->find($id);
+    }
+
+    public function firstWhere($column, $value)
+    {
+        return $this->model->firstWhere("{$column}", $value);
     }
 
     public function create(array $data)
