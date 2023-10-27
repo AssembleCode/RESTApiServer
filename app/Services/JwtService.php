@@ -29,23 +29,6 @@ class JwtService
         return $this->token = $token;
     }
 
-    // DECODE TOKEN PAYLOAD PART
-    public function getReadablePayloadFromToken($token)
-    {
-        $tokenParts = explode('.', $token);
-        if (count($tokenParts) != 3) return null;
-
-        return json_decode($this->base64Url_decode($tokenParts[1]));
-    }
-
-    // USER INFO FROM TOKEN PAYLOAD
-    public function getUserInfoFromToken()
-    {
-        $token = $this->getTokenFromRequest();
-        $readablePayload = $this->getReadablePayloadFromToken($token);
-        return !empty($readablePayload) && isset($readablePayload) ? $readablePayload->sub : null;
-    }
-
     public function generateTokens($userInfo)
     {
         try {
@@ -140,6 +123,26 @@ class JwtService
         $signatureEncodedPart = $this->base64Url_encode($signature);
         $token = "{$headerEncodedPart}.{$payloadEncodedPart}.{$signatureEncodedPart}";
         return $token;
+    }
+
+    // DECODE TOKEN PAYLOAD PART
+    public function getReadablePayloadFromToken($token)
+    {
+        $tokenParts = explode('.', $token);
+        if (count($tokenParts) != 3) return null;
+
+        return json_decode($this->base64Url_decode($tokenParts[1]));
+    }
+
+    // USER INFO FROM TOKEN PAYLOAD
+    public function getUserInfoFromToken($token): object|null
+    {
+        // $token = $this->getTokenFromRequest();
+        if ($token) {
+            $readablePayload = $this->getReadablePayloadFromToken($token);
+            return !empty($readablePayload) && isset($readablePayload) ? $readablePayload->sub : null;
+        }
+        return null;
     }
 
     // NEEDED CORE FUNCTIONS

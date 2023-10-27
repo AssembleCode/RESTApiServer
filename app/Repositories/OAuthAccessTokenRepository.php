@@ -15,6 +15,15 @@ class OAuthAccessTokenRepository extends BaseRepository
 
     public function revokeToken($token)
     {
-        $this->model->firstWhere("access_token", $token)->update(['revoked' => true]);
+        return $this->newQuery()
+            ->firstWhere("access_token", $token)
+            ->update(['revoked' => true]);
+    }
+
+    public function revokePreviousTokens($userId)
+    {
+        return $this->newQuery()
+            ->where('user_id', $userId)
+            ->update(['revoked' => true]);
     }
 }

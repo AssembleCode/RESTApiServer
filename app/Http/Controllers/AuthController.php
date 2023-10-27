@@ -12,6 +12,7 @@ use App\Exceptions\DataErrorException;
 use App\Exceptions\ValidatorException;
 use Illuminate\Validation\ValidationException;
 use App\Repositories\OAuthAccessTokenRepository;
+use App\Services\SessionService;
 
 class AuthController extends Controller
 {
@@ -34,11 +35,16 @@ class AuthController extends Controller
     public function setSessionUser()
     {
         try {
-            // NEED TO CHECK EXPIRIES OF TOKEN
-            $userInfo = $this->jwtService->getUserInfoFromToken();
-            $userId = isset($userInfo->id) ? $userInfo->id : null;
-            if ($userId) {
+            $sessionService = (new SessionService())->init();
+            $userInfo = $sessionService->getSessionUserInfo();
+
+            if ($userInfo != null) {
+                // VERIFIED TOKEN
+                $userId = isset($userInfo->id) ? $userInfo->id : null;
                 $this->sessionUser = $this->userRepository->find($userId);
+            } else {
+                // EXPIRED TOKEN / REVOKED
+                $this->sessionUser = null;
             }
         } catch (\Exception $e) {
             $this->sessionUser = null;
@@ -69,6 +75,9 @@ class AuthController extends Controller
                 $this->validateLoginWithPhone($request, $userInfo, $userCredentials);
             }
 
+            //REVOKE ALL PREVIOUS TOKEN
+            $this->oAuthAccessTokenRepository->revokePreviousTokens($userInfo->id);
+
             // GENERATE JWT token
             $tokenArray = $this->jwtService->generateTokens($userInfo);
 
@@ -83,12 +92,12 @@ class AuthController extends Controller
         }
     }
 
-    // START_WORK
     public function logout()
     {
         if ($this->sessionUser) {
-            $token = $this->jwtService->getTokenFromRequest();
-            $this->oAuthAccessTokenRepository->revokeToken($token);
+            $sessionService = (new SessionService())->init();
+            $sessionUserToken = $sessionService->getSessionUserToken();
+            $this->oAuthAccessTokenRepository->revokeToken($sessionUserToken);
             $this->sessionUser = null;
 
             return response()->json([
