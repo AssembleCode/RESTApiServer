@@ -51,6 +51,34 @@ class AuthController extends Controller
         }
     }
 
+    public function register(Request $request)
+    {
+        try {
+            $request->validate([
+                'name'     => 'required',
+                'email'    => 'required|unique:users,email|max:255',
+                'phone'    => 'required|unique:users,phone|max:20',
+                'password' => 'required|min:6',
+            ]);
+
+            $this->userRepository->create([
+                'name'     => $request->name,
+                'email'    => $request->email,
+                'phone'    => $request->phone,
+                'password' => $request->password,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'User registration successful',
+            ]);
+        } catch (ValidationException $exception) {
+            throw new ValidatorException($exception);
+        } catch (Exception $exception) {
+            throw $exception;
+        }
+    }
+
     public function login(Request $request)
     {
         try {
