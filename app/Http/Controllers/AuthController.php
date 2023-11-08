@@ -12,6 +12,7 @@ use App\Exceptions\DataErrorException;
 use App\Exceptions\ValidatorException;
 use Illuminate\Validation\ValidationException;
 use App\Repositories\OAuthAccessTokenRepository;
+use App\Services\PasswordPatternService;
 use App\Services\SessionService;
 
 class AuthController extends Controller
@@ -54,11 +55,20 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         try {
+            // ADMIN CAN CHANGE THIS PATTERN FROM PASSWORD PATTERN UI
+            $passwordPatternService = new PasswordPatternService(8, true, true, true, true); //VALUE WILL BE DYNAMIC
+            $passwordPolicy = $passwordPatternService->policyMaker();
+            $passPattern = '/' . $passwordPolicy['pattern'] . '/';
+            $passLength = $passwordPolicy['patterns']['length'];
+            $message = $passwordPolicy['patterns']['message'];
+
             $request->validate([
                 'name'     => 'required',
                 'email'    => 'required|unique:users,email|max:255',
                 'phone'    => 'required|unique:users,phone|max:20',
-                'password' => 'required|min:6',
+                'password' => ["required", "min:$passLength", "regex:$passPattern"],
+            ], [
+                'password.regex' => $message,
             ]);
 
             $this->userRepository->create([
