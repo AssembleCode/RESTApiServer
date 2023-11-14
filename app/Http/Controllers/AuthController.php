@@ -42,7 +42,7 @@ class AuthController extends Controller
             if ($userInfo != null) {
                 // VERIFIED TOKEN
                 $userId = isset($userInfo->id) ? $userInfo->id : null;
-                $this->sessionUser = $this->userRepository->find($userId);
+                $this->sessionUser = $this->userRepository->findById($userId);
             } else {
                 // EXPIRED TOKEN / REVOKED
                 $this->sessionUser = null;

@@ -28,9 +28,9 @@ abstract class BaseRepository implements BaseRepositoryInterface
         return $this->model->all();
     }
 
-    public function find($id)
+    public function findById($id, array $columns = ['*'])
     {
-        return $this->model->find($id);
+        return $this->model->find($id, $columns);
     }
 
     public function firstWhere($column, $value)
