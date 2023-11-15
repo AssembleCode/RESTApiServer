@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\ValidatorException;
 use App\Repositories\ExampleRepository;
+use App\Traits\Controller\RestControllerTrait;
+use App\Validators\ExampleValidator;
 use Dotenv\Exception\ValidationException;
 use Exception;
 use Illuminate\Http\Request;
@@ -12,9 +14,14 @@ class ExampleController extends Controller
 {
     private $repository;
 
-    public function __construct(ExampleRepository $repository)
+    private $validator;
+
+    use RestControllerTrait;
+
+    public function __construct(ExampleRepository $repository, ExampleValidator $validator)
     {
         $this->repository = $repository;
+        $this->validator = $validator;
     }
 
     public function index()
@@ -25,41 +32,17 @@ class ExampleController extends Controller
     {
         try {
             if (!isset($this->repository)) {
-                $errorMessage = 'Repository not found';
-                $response = [
-                    'code'    => 422,
-                    'status'  => 'error',
-                    'data'    => $errorMessage,
-                    'message' => 'Unprocessable Entity'
-                ];
-                return response()->json($response['data']);
+                return $this->errorResponse('Repository not found');
             }
 
-            $this->validate(
-                $request,
-                [
-                    'title' => 'required'
-                ],
-                [
-                    'title' => 'Title is required',
-                ],
-                [
-                    'title' => 'Title'
-                ]
-            ); // REQUEST, RULES, MESSAGES, ATTRIBUTES
+            // REQUEST, RULES, MESSAGES, ATTRIBUTES
+            $this->validate($request, $this->validator->rules(), $this->validator->messages(), $this->validator->attributes());
 
-            $this->repository->create($request->all());
-            $response = [
-                'code'    => 200,
-                'status'  => 'success',
-                'data'    => 'Example created successfully',
-                'message' => 'Unprocessable Entity'
-            ];
-            return response()->json($response['data']);
-        } catch (ValidationException $e) {
-            throw new ValidatorException($e);
-        } catch (Exception $e) {
-            return $e->getMessage();
+            $storedData = $this->repository->create($request->all());
+
+            return $this->successResponse($storedData);
+        } catch (Exception $exception) {
+            throw new ValidatorException($exception);
         }
     }
 
@@ -69,6 +52,21 @@ class ExampleController extends Controller
 
     public function update(Request $request, $id)
     {
+        try {
+            if (!isset($this->repository)) {
+                return $this->errorResponse('Repository not found');
+            }
+
+            // REQUEST, RULES, MESSAGES, ATTRIBUTES
+            $this->validate($request, $this->validator->rules(), $this->validator->messages(), $this->validator->attributes());
+
+            $this->repository->update($request->all(), $id);
+            $response = $this->repository->findById($id);
+
+            return $this->successResponse($response);
+        } catch (Exception $exception) {
+            throw new ValidatorException($exception);
+        }
     }
 
     public function destroy($id)

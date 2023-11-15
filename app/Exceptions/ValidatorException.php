@@ -19,6 +19,6 @@ class ValidatorException extends Exception
 
     public function render()
     {
-        return response()->json($this->exception->errors(), $this->code);
+        return response()->json($this->exception->getMessage(), $this->code);
     }
 }

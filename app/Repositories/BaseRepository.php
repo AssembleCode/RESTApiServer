@@ -42,4 +42,9 @@ abstract class BaseRepository implements BaseRepositoryInterface
     {
         return $this->model->create($data);
     }
+
+    public function update(array $data, $id)
+    {
+        return $this->model->find($id)->update($data);
+    }
 }

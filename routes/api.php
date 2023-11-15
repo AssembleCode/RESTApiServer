@@ -21,3 +21,4 @@ Route::post('/register', [App\Http\Controllers\AuthController::class, 'register'
 Route::post('/login', [App\Http\Controllers\AuthController::class, 'login']);
 Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout']);
 Route::post('/example', [App\Http\Controllers\ExampleController::class, 'store']);
+Route::put('/example/{id}', [App\Http\Controllers\ExampleController::class, 'update']);
