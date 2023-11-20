@@ -9,15 +9,6 @@ abstract class BaseRepository implements BaseRepositoryInterface
 {
     protected $model;
 
-    public function init()
-    {
-    }
-
-    public function getModel()
-    {
-        return $this->model;
-    }
-
     public function newQuery(): Builder
     {
         return $this->model->newQuery();
