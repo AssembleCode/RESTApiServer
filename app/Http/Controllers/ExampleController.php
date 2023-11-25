@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\ValidatorException;
+use App\Http\Requests\ExampleRequest;
 use App\Repositories\ExampleRepository;
+use App\Services\ExampleService;
 use App\Traits\Controller\RestControllerTrait;
 use App\Validators\ExampleValidator;
 use Dotenv\Exception\ValidationException;
@@ -12,35 +14,37 @@ use Illuminate\Http\Request;
 
 class ExampleController extends Controller
 {
-    private $repository;
-
-    private $validator;
-
     use RestControllerTrait;
 
-    public function __construct(ExampleRepository $repository, ExampleValidator $validator)
+    private $service;
+    private $validator;
+
+    public function __construct(ExampleService $service)
     {
-        $this->repository = $repository;
-        $this->validator = $validator;
+        $this->service = $service;
     }
 
     public function index()
     {
+        try {
+            $response = $this->service->index();
+            return $this->successResponse($response);
+        } catch (Exception $exception) {
+            throw new ValidatorException($exception);
+        }
     }
 
+    // public function store(ExampleRequest $request)
     public function store(Request $request)
     {
         try {
-            if (!isset($this->repository)) {
-                return $this->errorResponse('Repository not found');
-            }
+            // USING FORM REQUEST CLASS
+            // $response = $this->service->storeData($request->validationData());
+            // return $this->successResponse($response);
 
-            // REQUEST, RULES, MESSAGES, ATTRIBUTES
-            $this->validate($request, $this->validator->rules(), $this->validator->messages(), $this->validator->attributes());
-
-            $storedData = $this->repository->create($request->all());
-
-            return $this->successResponse($storedData);
+            // USING VALIDATION CLASS
+            $response = $this->service->storeData($request);
+            return $this->successResponse($response);
         } catch (Exception $exception) {
             throw new ValidatorException($exception);
         }
@@ -48,21 +52,18 @@ class ExampleController extends Controller
 
     public function show($id)
     {
+        try {
+            $response = $this->service->showData($id);
+            return $this->successResponse($response);
+        } catch (Exception $exception) {
+            throw new ValidatorException($exception);
+        }
     }
 
     public function update(Request $request, $id)
     {
         try {
-            if (!isset($this->repository)) {
-                return $this->errorResponse('Repository not found');
-            }
-
-            // REQUEST, RULES, MESSAGES, ATTRIBUTES
-            $this->validate($request, $this->validator->rules(), $this->validator->messages(), $this->validator->attributes());
-
-            $this->repository->update($request->all(), $id);
-            $response = $this->repository->findById($id);
-
+            $response = $this->service->updateData($request, $id);
             return $this->successResponse($response);
         } catch (Exception $exception) {
             throw new ValidatorException($exception);
