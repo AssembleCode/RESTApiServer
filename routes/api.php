@@ -23,5 +23,6 @@ Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout']);
 
 Route::get('/example', [App\Http\Controllers\ExampleController::class, 'index']);
 Route::post('/example', [App\Http\Controllers\ExampleController::class, 'store']);
+Route::get('/example/{id}', [App\Http\Controllers\ExampleController::class, 'show']);
 Route::put('/example/{id}', [App\Http\Controllers\ExampleController::class, 'update']);
 Route::delete('/example/{id}', [App\Http\Controllers\ExampleController::class, 'destroy']);
