@@ -7,6 +7,7 @@ use App\Traits\Controller\Functions\TraitRestIndex;
 use App\Traits\Controller\Functions\TraitRestShow;
 use App\Traits\Controller\Functions\TraitRestStore;
 use App\Traits\Controller\Functions\TraitRestUpdate;
+use App\Traits\Controller\Functions\TraitRestUpdateFields;
 use App\Traits\Response\TraitRestResponse;
 
 trait RestControllerTrait
@@ -16,5 +17,6 @@ trait RestControllerTrait
     use TraitRestStore;
     use TraitRestShow;
     use TraitRestUpdate;
+    use TraitRestUpdateFields;
     use TraitRestDestroy;
 }

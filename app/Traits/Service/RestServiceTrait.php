@@ -8,6 +8,7 @@ use App\Traits\Service\Functions\TraitRestShowData;
 use App\Traits\Service\Functions\TraitRestStoreData;
 use App\Traits\Service\Functions\TraitRestUpdateData;
 use App\Traits\Response\TraitRestResponse;
+use App\Traits\Service\Functions\TraitRestUpdateFieldsData;
 
 trait RestServiceTrait
 {
@@ -16,5 +17,6 @@ trait RestServiceTrait
     use TraitRestStoreData;
     use TraitRestShowData;
     use TraitRestUpdateData;
+    use TraitRestUpdateFieldsData;
     use TraitRestDeleteData;
 }

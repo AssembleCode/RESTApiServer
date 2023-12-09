@@ -21,8 +21,17 @@ Route::post('/register', [App\Http\Controllers\AuthController::class, 'register'
 Route::post('/login', [App\Http\Controllers\AuthController::class, 'login']);
 Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout']);
 
-Route::get('/example', [App\Http\Controllers\ExampleController::class, 'index']);
-Route::post('/example', [App\Http\Controllers\ExampleController::class, 'store']);
-Route::get('/example/{id}', [App\Http\Controllers\ExampleController::class, 'show']);
-Route::put('/example/{id}', [App\Http\Controllers\ExampleController::class, 'update']);
-Route::delete('/example/{id}', [App\Http\Controllers\ExampleController::class, 'destroy']);
+Route::prefix('example')->group(function () {
+    // GET ALL WITH PAGINATION
+    Route::get('/', [App\Http\Controllers\ExampleController::class, 'index']);
+    // STORE
+    Route::post('/', [App\Http\Controllers\ExampleController::class, 'store']);
+    // UPDATE (WITH VALIDATION)
+    Route::put('/{id}', [App\Http\Controllers\ExampleController::class, 'update']);
+    // SHOW
+    Route::get('/{id}', [App\Http\Controllers\ExampleController::class, 'show']);
+    // UPDATE PARTIAL (WITHOUT VALIDATION)
+    Route::patch('/{id}', [App\Http\Controllers\ExampleController::class, 'updateFields']);
+    // DELETE
+    Route::delete('/{id}', [App\Http\Controllers\ExampleController::class, 'destroy']);
+});

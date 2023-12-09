@@ -8,10 +8,11 @@ use App\Traits\Service\RestServiceTrait;
 
 class ExampleService
 {
-    use RestServiceTrait;
-
-    protected $repository;
+    private $repository;
     private $validator;
+    private $partialUpdateFields = ['status'];
+
+    use RestServiceTrait;
 
     public function __construct(ExampleRepository $repository, ExampleValidator $validator)
     {

@@ -11,7 +11,8 @@ trait TraitRestUpdate
     public function update(Request $request, $id)
     {
         try {
-            $response = $this->service->updateData($request, $id);
+            $result = $this->service->updateData($request, $id);
+            $response = isset($this->resource) ? new $this->resource($result) : $result;
             return $this->successResponse($response);
         } catch (Exception $exception) {
             throw new ValidatorException($exception);

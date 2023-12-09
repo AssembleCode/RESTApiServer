@@ -18,6 +18,7 @@ trait TraitRestStore
 
             // USING VALIDATION CLASS
             $response = $this->service->storeData($request);
+            $response = isset($this->resource) ? new $this->resource($response) : $response;
             return $this->successResponse($response);
         } catch (Exception $exception) {
             throw new ValidatorException($exception);
