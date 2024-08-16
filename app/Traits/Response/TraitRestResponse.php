@@ -45,4 +45,43 @@ trait TraitRestResponse
         ];
         return response()->json($response['message'], $response['code']);
     }
+
+    protected function parseResponseDataToArray($data)
+    {
+        $jsonResponse = response()->json($data)->getData();
+        return json_decode(json_encode($jsonResponse), true);
+    }
+
+    protected function successResourceResponse($data)
+    {
+        if (!empty($data)) {
+            $dataArray = $this->parseResponseDataToArray($data);
+            // $resourceData = $this->resource::withApiRelationalData($dataArray);
+            $resourceData = $dataArray;
+        }
+
+        $response = [
+            'code'         => 200,
+            'status'     => 'success',
+            'data'         => $resourceData
+        ];
+
+        return response()->json($response['data'], $response['code']);
+    }
+
+    protected function successResourceCollectionResponse($data)
+    {
+        if (!empty($data)) {
+            $dataArray = $this->parseResponseDataToArray($data);
+            // $dataArray['results'] = $this->resource::withApiRelationalData($dataArray['results']);
+        }
+
+        $response = [
+            'code'         => 200,
+            'status'     => 'success',
+            'data'         => $dataArray
+        ];
+
+        return response()->json($response['data'], $response['code']);
+    }
 }

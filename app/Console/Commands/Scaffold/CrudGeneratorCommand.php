@@ -19,7 +19,7 @@ class CrudGeneratorCommand extends Command
                               {singularName     : Singular name}
                               {pluralName?      : Plural name}
 
-                              {--all            : Bulk Create (model, migration, factory, controller, repository, validator, resource)}
+                              {--all            : Bulk Create (model, migration, factory, service, controller, repository, validator, resource)}
                               {--all-model      : Bulk Create (migration, model, seeder, factory)}
                               {--all-controller : Bulk Create (repository, controller, validator, resource)}
 
@@ -251,6 +251,7 @@ class CrudGeneratorCommand extends Command
         try {
             $this->call('imake:service', [
                 'name' => $this->singularName . 'Service',
+                '--model' => $this->singularName,
             ]);
         } catch (\Exception $e) {
             $this->error($e->getMessage());

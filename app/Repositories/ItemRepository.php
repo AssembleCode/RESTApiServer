@@ -1,26 +1,26 @@
 <?php
 
-namespace DummyNamespace;
+namespace App\Repositories;
 
-use DummyModelNamespace;
+use App\Models\Item;
 use App\Services\ODataService;
 
-class DummyClass extends BaseRepository
+class ItemRepository extends BaseRepository
 {
     /**
-    * @var DummyModelClass
-    */
+     * @var Item
+     */
     protected $model;
 
     protected $request;
 
     protected $oDataService;
 
-    protected $fieldSearchable = ['title', 'description'];
+    protected $fieldSearchable = ['name', 'description'];
 
     public function __construct()
     {
-       $this->model = new DummyModelClass();
+        $this->model = new Item();
     }
 
     protected function init()

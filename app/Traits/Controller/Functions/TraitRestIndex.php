@@ -11,8 +11,8 @@ trait TraitRestIndex
     {
         try {
             $response = $this->service->index();
-            $response = isset($this->resource) ? $this->resource::collection($response) : $response;
-            return $this->successResponse($response);
+            $response['results'] = isset($this->resource) ? $this->resource::collection($response['results']) : $response['results'];
+            return $this->successResourceCollectionResponse($response);
         } catch (Exception $exception) {
             throw new ValidatorException($exception);
         }

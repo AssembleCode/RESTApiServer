@@ -1,8 +1,8 @@
 <?php
 
-namespace DummyNamespace;
+namespace App\Validators;
 
-class DummyClass extends BaseValidator
+class ItemValidator extends BaseValidator
 {
     protected $request;
 
@@ -14,13 +14,13 @@ class DummyClass extends BaseValidator
 
             case 'POST':
                 return [
-                    'name_en' => ['required'],
-                    'name_bn' => ['required'],
+                    'name'       => ['required'],
+                    'description' => ['required'],
                 ];
             case 'PATCH':
                 return [
-                    'name_en' => ['required'],
-                    'name_bn' => ['required']
+                    'name'       => ['required'],
+                    'description' => ['required'],
                 ];
             case 'PUT':
                 break;
@@ -54,5 +54,4 @@ class DummyClass extends BaseValidator
 
         return array_merge($attributes, $includesAttributes);
     }
-
 }

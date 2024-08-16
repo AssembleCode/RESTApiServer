@@ -1,4 +1,4 @@
-# Generate All (--controller, --model, --repository, --resource, --validator, --migration)
+# Generate All (--controller, --service, --model, --repository, --resource, --validator, --migration)
 php artisan imake:crud Sample Samples --all
 
 # Generate (--model, --repository, --validator, --migration)

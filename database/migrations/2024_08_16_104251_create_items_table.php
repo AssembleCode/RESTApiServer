@@ -4,30 +4,26 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class DummyClass extends Migration
+class CreateItemsTable extends Migration
 {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('DummyTable', function (Blueprint $table) {
+        Schema::create('items', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique();
-            $table->unsignedBigInteger('organogram_id')->nullable();
 
-            $table->string('title');
+            $table->string('name');
             $table->string('description')->nullable();
             $table->text('comment')->nullable();
-            $table->longText('note')->nullable();
-            $table->date('date')->nullable();
-            $table->decimal('amount', 15, 2)->default(0);
-            $table->boolean('is_default')->default(0)->nullable();
 
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->softDeletes();
             $table->timestamps();
+            $table->integer('sort_order')->default(0);
             $table->boolean('status')->default(1);
         });
     }
@@ -37,6 +33,6 @@ class DummyClass extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('DummyTable');
+        Schema::dropIfExists('items');
     }
 }

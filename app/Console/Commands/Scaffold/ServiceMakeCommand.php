@@ -39,7 +39,6 @@ class ServiceMakeCommand extends GeneratorCommand
     protected function buildReplacements()
     {
         $modelName = trim($this->option('model'));
-        Log::info($modelName);
         return [
             'DummyRepositoryClass' => $modelName . 'Repository',
             'DummyValidatorClass'  => $modelName . 'Validator'

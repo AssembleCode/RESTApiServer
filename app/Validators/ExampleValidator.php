@@ -2,21 +2,9 @@
 
 namespace App\Validators;
 
-use Illuminate\Http\Request;
-
 class ExampleValidator extends BaseValidator
 {
-    private $request;
-
-    public function __construct(Request $request)
-    {
-        $this->request = $request;
-    }
-
-    public function authorize(): bool
-    {
-        return true;
-    }
+    protected $request;
 
     public function rules(): array
     {

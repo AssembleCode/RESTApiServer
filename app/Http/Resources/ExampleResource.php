@@ -2,9 +2,6 @@
 
 namespace App\Http\Resources;
 
-use Exception;
-use Illuminate\Http\Request;
-
 class ExampleResource extends BaseResource
 {
     /**
@@ -14,16 +11,12 @@ class ExampleResource extends BaseResource
      */
     public function toArray($request): array
     {
-        try {
-            $data = parent::toArray($request);
-            $includesData = [];
+        $data = parent::toArray($request);
+        $includesData = [];
 
-            if (isset($data['id'])) {
-                $includesData['name'] = 'Rafikul Islam';
-            }
-            return array_merge($data, $includesData);
-        } catch (Exception $exception) {
-            return parent::toArray($request);
+        if (isset($data['id'])) {
+            $includesData['name'] = 'Rafikul Islam';
         }
+        return array_merge($data, $includesData);
     }
 }

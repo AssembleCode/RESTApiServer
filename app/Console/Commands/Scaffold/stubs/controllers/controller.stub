@@ -18,5 +18,4 @@ class DummyClass extends Controller
         $this->service = $service;
         $this->resource = DummyResourceClass::class;
     }
-
 }
