@@ -15,6 +15,7 @@ class SessionService
 
     private $oAuthAccessTokenRepository;
 
+
     public function __construct()
     {
         $this->jwtService = new JwtService();

@@ -2,9 +2,8 @@
 
 namespace App\Http\Resources;
 
-use App\Repositories\UserRepository;
 use Exception;
-use Illuminate\Http\Request;
+use App\Repositories\UserRepository;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class BaseResource extends JsonResource
@@ -14,7 +13,7 @@ class BaseResource extends JsonResource
      *
      * @return array<string, mixed>
      */
-    public function toArray(Request $request): array
+    public function toArray($request): array
     {
         try {
             $data = parent::toArray($request);

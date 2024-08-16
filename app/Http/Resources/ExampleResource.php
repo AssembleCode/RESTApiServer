@@ -12,7 +12,7 @@ class ExampleResource extends BaseResource
      *
      * @return array<string, mixed>
      */
-    public function toArray(Request $request): array
+    public function toArray($request): array
     {
         try {
             $data = parent::toArray($request);

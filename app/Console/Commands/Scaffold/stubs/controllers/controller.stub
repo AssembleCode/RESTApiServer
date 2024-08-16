@@ -1,0 +1,22 @@
+<?php
+
+namespace DummyNamespace;
+
+use App\Services\DummyServiceClass;
+use App\Http\Resources\DummyResourceClass;
+use App\Traits\Controller\RestControllerTrait;
+
+class DummyClass extends Controller
+{
+    private $service;
+    private $resource;
+
+    use RestControllerTrait;
+
+    public function __construct(DummyServiceClass $service)
+    {
+        $this->service = $service;
+        $this->resource = DummyResourceClass::class;
+    }
+
+}

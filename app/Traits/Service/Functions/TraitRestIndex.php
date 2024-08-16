@@ -9,7 +9,7 @@ trait TraitRestIndex
         if (!isset($this->repository)) {
             return $this->errorResponse('Repository not found');
         }
-        $response = $this->repository->all();
+        $response = $this->repository->list();
         return $response;
     }
 }

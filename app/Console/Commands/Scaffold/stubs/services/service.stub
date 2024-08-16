@@ -1,0 +1,23 @@
+<?php
+
+namespace DummyNamespace;
+
+use App\Validators\DummyValidatorClass;
+use App\Traits\Service\RestServiceTrait;
+use App\Repositories\DummyRepositoryClass;
+
+class DummyClass
+{
+    private $repository;
+    private $validator;
+    private $partialUpdateFields = ['status'];
+
+    use RestServiceTrait;
+
+    public function __construct(DummyRepositoryClass $repository, DummyValidatorClass $validator)
+    {
+        $this->repository = $repository;
+        $this->validator = $validator;
+    }
+
+}
