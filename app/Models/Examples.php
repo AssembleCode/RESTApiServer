@@ -2,13 +2,16 @@
 
 namespace App\Models;
 
+use App\Enums\StatusEnum;
+use App\Traits\Model\Autofill;
 use App\Traits\Model\Uuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Examples extends Model
 {
-    use HasFactory, Uuid;
+    use HasFactory, SoftDeletes, Autofill, Uuid;
 
     protected $fillable = ['title', 'description', 'status'];
 
@@ -26,6 +29,11 @@ class Examples extends Model
     ];
 
     protected $dates = [
-        'created_at', 'updated_at'
+        'created_at',
+        'updated_at'
+    ];
+
+    protected $attributes = [
+        'status' => StatusEnum::ACTIVE,
     ];
 }

@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\Log;
 class ServiceMakeCommand extends GeneratorCommand
 {
     protected $signature = 'imake:service
-                            {name : service name, e.g. SampleService}';
+                            {name : service name, e.g. SampleService}
+                            {--model= : The name of the model}';
 
     protected $description = 'Create a new Service class.';
 
@@ -38,7 +39,6 @@ class ServiceMakeCommand extends GeneratorCommand
     protected function buildReplacements()
     {
         $modelName = trim($this->option('model'));
-        // $modelName = $modelName ?: $this->argument('name');
         Log::info($modelName);
         return [
             'DummyRepositoryClass' => $modelName . 'Repository',

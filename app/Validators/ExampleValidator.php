@@ -4,7 +4,7 @@ namespace App\Validators;
 
 use Illuminate\Http\Request;
 
-class ExampleValidator
+class ExampleValidator extends BaseValidator
 {
     private $request;
 

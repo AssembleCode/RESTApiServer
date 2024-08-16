@@ -65,8 +65,8 @@ class CrudGeneratorCommand extends Command
             $this->input->setOption('migration', true);
             $this->input->setOption('model', true);
             $this->input->setOption('repository', true);
-            $this->input->setOption('controller', true);
             $this->input->setOption('service', true);
+            $this->input->setOption('controller', true);
             $this->input->setOption('resource', true);
             $this->input->setOption('validator', true);
         }
